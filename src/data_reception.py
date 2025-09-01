@@ -7,9 +7,7 @@ from datetime import datetime
 from typing import List, Dict, Tuple
 
 class DataReceptionSystem:
-    """
-    Sistema de recepción de datos de pasajeros con validación y procesamiento
-    """
+    """Sistema de recepción de datos de pasajeros con validación y procesamiento"""
     
     def __init__(self):
         self.required_columns = ['name', 'id', 'lat', 'lng', 'company_address']
@@ -22,7 +20,6 @@ class DataReceptionSystem:
         def convert_coordinate(coord):
             if isinstance(coord, str):
                 # Remover puntos y convertir a float dividiendo por 1000
-                # Ejemplo: "47.265.318" -> 47265318 -> 47.265318
                 clean_str = coord.replace('.', '')
                 if clean_str and clean_str.replace('-', '').isdigit():
                     # Si tiene más de 2 dígitos antes del decimal, dividir
@@ -35,7 +32,7 @@ class DataReceptionSystem:
                     return float(clean_str)
             elif isinstance(coord, (int, float)):
                 # Si ya es numérico pero tiene formato incorrecto
-                if abs(coord) > 180:  # Coordenadas válidas están entre -180 y 180
+                if abs(coord) > 180:
                     return coord / 1000
             return coord
         
@@ -88,7 +85,7 @@ class DataReceptionSystem:
             df = pd.read_csv(file_path)
             print(f"✅ Archivo leído exitosamente: {len(df)} pasajeros")
             
-            # Limpiar coordenadas (nuevo paso)
+            # Limpiar coordenadas
             print("🔧 Limpiando formato de coordenadas...")
             df = self.clean_coordinates(df)
             

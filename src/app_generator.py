@@ -5,13 +5,16 @@ Módulo para generación de outputs JSON para aplicaciones móviles
 from datetime import datetime, timedelta
 from typing import Dict
 
+def get_route_calculator():
+    """Helper function para obtener el route calculator"""
+    from src.real_routing import RealRouteCalculator
+    return RealRouteCalculator()
+
 class AppDataGenerator:
-    """
-    Genera los outputs JSON para las aplicaciones de pasajeros y conductores
-    """
+    """Genera los outputs JSON para las aplicaciones de pasajeros y conductores"""
     
     def __init__(self):
-        self.route_calculator = RealRouteCalculator()
+        self.route_calculator = get_route_calculator()
     
     def generate_passenger_app_data(self, routes_data: Dict, passenger_id: str) -> Dict:
         """Genera datos para la app del pasajero con tiempos reales"""

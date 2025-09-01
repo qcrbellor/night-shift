@@ -9,16 +9,18 @@ from geopy.distance import geodesic
 from typing import List, Dict
 from datetime import datetime
 
+def get_route_calculator():
+    """Helper function para obtener el route calculator"""
+    from src.real_routing import RealRouteCalculator
+    return RealRouteCalculator()
+
 class RouteOptimizer:
-    """
-    Sistema de optimización de rutas usando clustering y TSP con rutas reales
-    """
+    """Sistema de optimización de rutas usando clustering y TSP"""
     
     def __init__(self, bus_capacities=[8, 15, 19, 20, 40]):
-        self.bus_capacities = sorted(bus_capacities, reverse=True)  # Ordenar de mayor a menor
+        self.bus_capacities = sorted(bus_capacities, reverse=True)
         self.routes = []
         self.buses_needed = []
-        self.route_calculator = RealRouteCalculator()
     
     def calculate_distance_matrix(self, passengers: pd.DataFrame) -> np.ndarray:
         """Calcula matriz de distancias entre todos los puntos"""
@@ -36,6 +38,8 @@ class RouteOptimizer:
     
     def calculate_real_distance_matrix(self, passengers: pd.DataFrame) -> np.ndarray:
         """Calcula matriz de tiempos de viaje reales entre puntos"""
+        route_calculator = get_route_calculator()
+        
         coords = passengers[['lat', 'lng']].values
         n = len(coords)
         time_matrix = np.zeros((n, n))
@@ -44,7 +48,7 @@ class RouteOptimizer:
             for j in range(i+1, n):
                 origin = (coords[i][0], coords[i][1])
                 destination = (coords[j][0], coords[j][1])
-                duration_min, _ = self.route_calculator.get_route_duration_distance(origin, destination)
+                duration_min, _ = route_calculator.get_route_duration_distance(origin, destination)
                 time_matrix[i][j] = duration_min
                 time_matrix[j][i] = duration_min
         
@@ -52,6 +56,8 @@ class RouteOptimizer:
     
     def get_real_route_coordinates(self, passengers: pd.DataFrame) -> List[List[float]]:
         """Obtiene coordenadas de ruta real incluyendo la oficina"""
+        route_calculator = get_route_calculator()
+        
         office_coords = (4.6724261, -74.1288623)
         
         # Crear lista de coordenadas: oficina + pasajeros en orden
@@ -60,21 +66,21 @@ class RouteOptimizer:
             all_coords.append((passenger['lat'], passenger['lng']))
         
         # Obtener ruta real
-        return self.route_calculator.get_route_coordinates(all_coords)
+        return route_calculator.get_route_coordinates(all_coords)
     
     def cluster_passengers(self, passengers: pd.DataFrame, method='kmeans') -> pd.DataFrame:
         """Agrupa pasajeros por proximidad geográfica"""
         
         # Estimar número de clusters basado en capacidad de buses
         total_passengers = len(passengers)
-        estimated_clusters = max(1, total_passengers // 20)  # Aproximadamente 20 pasajeros por cluster
+        estimated_clusters = max(1, total_passengers // 20)
         
         coords = passengers[['lat', 'lng']].values
         
         if method == 'kmeans':
             clustering = KMeans(n_clusters=min(estimated_clusters, total_passengers), 
                               random_state=42, n_init=10)
-        else:  # DBSCAN
+        else:
             clustering = DBSCAN(eps=0.01, min_samples=2)
         
         passengers['cluster'] = clustering.fit_predict(coords)
@@ -140,7 +146,7 @@ class RouteOptimizer:
         return route
     
     def generate_routes(self, passengers: pd.DataFrame) -> Dict:
-        """Genera rutas optimizadas para todos los pasajeros con rutas reales"""
+        """Genera rutas optimizadas para todos los pasajeros"""
         
         try:
             # 1. Clustering de pasajeros
@@ -156,7 +162,7 @@ class RouteOptimizer:
             # 3. Asignar vehículos
             vehicle_assignments = self.optimize_vehicle_assignment(clusters)
             
-            # 4. Generar rutas TSP para cada bus con rutas reales
+            # 4. Generar rutas TSP para cada bus
             routes_data = []
             bus_counter = 1
             
@@ -182,7 +188,7 @@ class RouteOptimizer:
                     # Para un solo pasajero, ruta directa desde oficina
                     office_coords = (4.6724261, -74.1288623)
                     passenger_coords = (ordered_passengers.iloc[0]['lat'], ordered_passengers.iloc[0]['lng'])
-                    route_coords = self.route_calculator.get_route_coordinates([office_coords, passenger_coords])
+                    route_coords = get_route_calculator().get_route_coordinates([office_coords, passenger_coords])
                 
                 route_info = {
                     'bus_id': f"BUS-{bus_counter:03d}",
@@ -191,7 +197,7 @@ class RouteOptimizer:
                     'passengers_count': assignment['passengers_count'],
                     'passengers': ordered_passengers.to_dict('records'),
                     'route_coordinates': route_coords,
-                    'real_route_geometry': route_coords  # Para compatibilidad
+                    'real_route_geometry': route_coords
                 }
                 
                 routes_data.append(route_info)
@@ -215,7 +221,6 @@ class RouteOptimizer:
         
         except Exception as e:
             print(f"❌ Error en generate_routes: {str(e)}")
-            # Return empty structure to prevent complete failure
             return {
                 'routes': [],
                 'summary': {

@@ -7,9 +7,7 @@ from typing import List, Tuple
 from geopy.distance import geodesic
 
 class RealRouteCalculator:
-    """
-    Calcula rutas reales usando OSRM (Open Source Routing Machine)
-    """
+    """Calcula rutas reales usando OSRM (Open Source Routing Machine)"""
     
     def __init__(self, base_url="http://router.project-osrm.org/route/v1/driving/"):
         self.base_url = base_url
@@ -42,7 +40,7 @@ class RealRouteCalculator:
         return coordinates
     
     def get_route_duration_distance(self, origin: Tuple[float, float], destination: Tuple[float, float]) -> Tuple[float, float]:
-        """Obtiene duración y distancia de ruta entre two puntos"""
+        """Obtiene duración y distancia de ruta entre dos puntos"""
         try:
             coords_str = f"{origin[1]},{origin[0]};{destination[1]},{destination[0]}"
             url = f"{self.base_url}{coords_str}?overview=false"

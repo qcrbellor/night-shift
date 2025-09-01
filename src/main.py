@@ -6,18 +6,21 @@ Ejecutar: python src/main.py
 
 import sys
 import os
+import time
+import json
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from datetime import datetime
+
+# Añadir el directorio src al path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from src.data_reception import DataReceptionSystem
 from src.route_optimizer import RouteOptimizer
 from src.visualization import RouteVisualizer
 from src.app_generator import AppDataGenerator
-import time
-from datetime import datetime
-import json
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+from src.stats_visualization import StatsVisualizer
 
 def ensure_data_directory():
     """Asegura que el directorio data existe"""
@@ -59,10 +62,16 @@ def execute_night_shift_system():
     print(f"📊 Resumen: {routes_data['summary']['total_buses']} buses para {routes_data['summary']['total_passengers']} pasajeros")
     print(f"🎯 Utilización de flota: {routes_data['summary']['utilization_rate']:.1%}")
     
+    # Paso 2.5: Generar gráficas estadísticas
+    print("\n📊 GENERANDO GRÁFICAS ESTADÍSTICAS")
+    stats_visualizer = StatsVisualizer()
+    stats_visualizer.create_all_charts(routes_data, processing_time, optimization_time)
+    
     # Paso 3: Crear visualización
     print("\n3️⃣ VISUALIZACIÓN DE RUTAS")
     try:
-        route_map = visualizer.create_route_map(routes_data, 'bas_routes_map.html')
+        route_map = visualizer.create_route_map(routes_data, 'routes_map.html')
+        print("🗺️ Mapa de rutas generado exitosamente")
     except Exception as e:
         print(f"❌ Error creando mapa: {str(e)}")
     
@@ -83,13 +92,13 @@ def execute_night_shift_system():
             driver_app_data = {"error": "No routes available"}
             
         # Guardar outputs
-        with open('passenger_app_output.json', 'w', encoding='utf-8') as f:
+        with open('json/passenger_app_output.json', 'w', encoding='utf-8') as f:
             json.dump(passenger_app_data, f, indent=2, ensure_ascii=False)
-        
-        with open('driver_app_output.json', 'w', encoding='utf-8') as f:
+
+        with open('json/driver_app_output.json', 'w', encoding='utf-8') as f:
             json.dump(driver_app_data, f, indent=2, ensure_ascii=False)
-        
-        with open('complete_routes_data.json', 'w', encoding='utf-8') as f:
+
+        with open('json/complete_routes_data.json', 'w', encoding='utf-8') as f:
             json.dump(routes_data, f, indent=2, ensure_ascii=False)
         
         # Mostrar tiempo total de procesamiento
@@ -119,7 +128,13 @@ if __name__ == "__main__":
     if routes_result:
         print("\n✅ PROCESO COMPLETADO EXITOSAMENTE")
         print("📁 Archivos generados:")
-        print("• bas_routes_map.html - Mapa interactivo de rutas")
-        print("• passenger_app_output.json - Datos para app de pasajeros")
-        print("• driver_app_output.json - Datos para app de conductores")
-        print("• complete_routes_data.json - Datos completos de rutas")
+        print("• routes_map.html - Mapa interactivo de rutas")
+        print("• json/passenger_app_output.json - Datos para app de pasajeros")
+        print("• json/driver_app_output.json - Datos para app de conductores")
+        print("• json/complete_routes_data.json - Datos completos de rutas")
+        print("• img/bus_utilization_analysis.png - Análisis de utilización")
+        print("• img/geographic_distribution.png - Distribución geográfica")
+        print("• img/performance_timeline.png - Timeline de performance")
+    else:
+        print("\n❌ EL SISTEMA NO PUDO COMPLETARSE")
+        print("💡 Verifica que el archivo data/passengers.csv exista y tenga el formato correcto")
