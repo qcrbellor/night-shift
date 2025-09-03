@@ -18,7 +18,7 @@ Sistema completo de optimización de rutas para transporte corporativo nocturno.
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/night-shift.git
+git clone https://github.com/qcrbellor/night-shift.git
 cd night-shift
 ```
 ### 2. Instalar Dependencias
@@ -48,4 +48,4 @@ El sistema generará:
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
 </a>
 </p>
-Last Edited on: 03/09/2025
+Last Edited on: 03/09s/2025
