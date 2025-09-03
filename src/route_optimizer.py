@@ -1,6 +1,4 @@
-"""
-Módulo de optimización de rutas usando clustering y TSP
-"""
+"""Módulo de optimización de rutas usando clustering y TSP"""
 
 import pandas as pd
 import numpy as np
@@ -15,7 +13,7 @@ def get_route_calculator():
     return RealRouteCalculator()
 
 class RouteOptimizer:
-    """Sistema de optimización de rutas usando clustering y TSP"""
+    """Optimización de rutas usando clustering y TSP"""
     
     def __init__(self, bus_capacities=[8, 15, 19, 20, 40]):
         self.bus_capacities = sorted(bus_capacities, reverse=True)
@@ -220,7 +218,7 @@ class RouteOptimizer:
             }
         
         except Exception as e:
-            print(f"❌ Error en generate_routes: {str(e)}")
+            print(f"Error en generate_routes: {str(e)}")
             return {
                 'routes': [],
                 'summary': {

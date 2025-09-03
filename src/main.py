@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Punto de entrada principal del sistema Night Shift
-Ejecutar: python src/main.py
-"""
+""" Sistema principal del turno nocturno: python src/main.py"""
 
 import sys
 import os
@@ -13,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-# Añadir el directorio src al path
+# Añadir src al path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from src.data_reception import DataReceptionSystem
@@ -23,7 +20,6 @@ from src.app_generator import AppDataGenerator
 from src.stats_visualization import StatsVisualizer
 
 def ensure_data_directory():
-    """Asegura que el directorio data existe"""
     os.makedirs('data', exist_ok=True)
 
 def execute_night_shift_system():
@@ -31,7 +27,7 @@ def execute_night_shift_system():
     
     ensure_data_directory()
     
-    # Inicializar sistema
+    # Inicializar
     data_processor = DataReceptionSystem()
     route_optimizer = RouteOptimizer()
     visualizer = RouteVisualizer()
@@ -40,43 +36,43 @@ def execute_night_shift_system():
     CSV_FILE_PATH = 'data/passengers.csv'
     
     print("="*60)
-    print("🌙 NIGHT SHIFT - SISTEMA DE TRANSPORTE NOCTURNO")
+    print("BAS - TRANSPORTE CORPORATIVO EFICIENTE")
     print("="*60)
     
-    # Paso 1: Recepción y validación de datos
-    print("\n1️⃣ RECEPCIÓN DE DATOS")
+    # Recepción y validación de datos
+    print("\n 1 - RECEPCIÓN DE DATOS")
     try:
         passengers_df = data_processor.process_passenger_data(CSV_FILE_PATH)
         processing_time = data_processor.calculate_processing_time()
     except Exception as e:
-        print(f"❌ Error en recepción de datos: {str(e)}")
+        print(f"Error en recepción de datos: {str(e)}")
         return None, None, None
     
-    # Paso 2: Optimización de rutas
-    print("\n2️⃣ OPTIMIZACIÓN DE RUTAS")
+    # Optimización
+    print("\n 2 - OPTIMIZACIÓN")
     start_optimization = time.time()
     routes_data = route_optimizer.generate_routes(passengers_df)
     optimization_time = (time.time() - start_optimization) / 60
     
-    print(f"✅ Rutas generadas en {optimization_time:.2f} minutos")
-    print(f"📊 Resumen: {routes_data['summary']['total_buses']} buses para {routes_data['summary']['total_passengers']} pasajeros")
-    print(f"🎯 Utilización de flota: {routes_data['summary']['utilization_rate']:.1%}")
+    print(f"Rutas generadas en {optimization_time:.2f} minutos")
+    print(f"Resumen: {routes_data['summary']['total_buses']} buses para {routes_data['summary']['total_passengers']} pasajeros")
+    print(f"Utilización de flota: {routes_data['summary']['utilization_rate']:.1%}")
     
-    # Paso 2.5: Generar gráficas estadísticas
-    print("\n📊 GENERANDO GRÁFICAS ESTADÍSTICAS")
+    # Estadísticas
+    print("\n 3 - GENERANDO ESTADÍSTICAS")
     stats_visualizer = StatsVisualizer()
     stats_visualizer.create_all_charts(routes_data, processing_time, optimization_time)
     
-    # Paso 3: Crear visualización
-    print("\n3️⃣ VISUALIZACIÓN DE RUTAS")
+    # Visualización
+    print("\n 4 - VISUALIZACIÓN DE RUTAS")
     try:
         route_map = visualizer.create_route_map(routes_data, 'routes_map.html')
-        print("🗺️ Mapa de rutas generado exitosamente")
+        print("Mapa de rutas generado exitosamente")
     except Exception as e:
-        print(f"❌ Error creando mapa: {str(e)}")
+        print(f"Error creando mapa: {str(e)}")
     
-    # Paso 4: Generar outputs para apps
-    print("\n4️⃣ GENERACIÓN DE OUTPUTS PARA APPS")
+    # Outputs apps
+    print("\n 5 - GENERANDO OUTPUTS PARA APPS")
     
     try:
         first_passenger_id = passengers_df.iloc[0]['id']
@@ -103,31 +99,29 @@ def execute_night_shift_system():
         
         # Mostrar tiempo total de procesamiento
         total_time = processing_time + optimization_time
-        print(f"\n⏱️ TIEMPO TOTAL DE PROCESAMIENTO: {total_time:.2f} minutos")
+        print(f"\nTIEMPO TOTAL DE PROCESAMIENTO: {total_time:.2f} minutos")
         
         safety_margin = 15 - total_time
-        print(f"🛡️ MARGEN DE SEGURIDAD: {safety_margin:.2f} minutos")
+        print(f"MARGEN DE SEGURIDAD: {safety_margin:.2f} minutos")
         
         if safety_margin > 0:
-            print("✅ Tiempo suficiente para la operación")
+            print("Tiempo suficiente para la operación ✅")
         else:
-            print("⚠️ Necesitamos optimizar el proceso o recibir datos más temprano")
+            print("Necesitamos optimizar el proceso o recibir datos más temprano")
         
         return routes_data, passenger_app_data, driver_app_data
         
     except Exception as e:
-        print(f"❌ Error generando outputs: {str(e)}")
+        print(f"Error generando outputs: {str(e)}")
         return routes_data, None, None
 
 if __name__ == "__main__":
-    print("🚀 INICIANDO SISTEMA NIGHT SHIFT")
-    print("="*60)
     
     routes_result, passenger_output, driver_output = execute_night_shift_system()
     
     if routes_result:
-        print("\n✅ PROCESO COMPLETADO EXITOSAMENTE")
-        print("📁 Archivos generados:")
+        print("\n PROCESO COMPLETADO EXITOSAMENTE")
+        print(" Archivos generados:")
         print("• routes_map.html - Mapa interactivo de rutas")
         print("• json/passenger_app_output.json - Datos para app de pasajeros")
         print("• json/driver_app_output.json - Datos para app de conductores")
@@ -136,5 +130,5 @@ if __name__ == "__main__":
         print("• img/geographic_distribution.png - Distribución geográfica")
         print("• img/performance_timeline.png - Timeline de performance")
     else:
-        print("\n❌ EL SISTEMA NO PUDO COMPLETARSE")
-        print("💡 Verifica que el archivo data/passengers.csv exista y tenga el formato correcto")
+        print("\n EL SISTEMA NO PUDO COMPLETARSE")
+        print("Verifica que el archivo data/passengers.csv exista y tenga el formato correcto")

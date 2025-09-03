@@ -1,13 +1,11 @@
-"""
-Módulo para cálculo de rutas reales usando OSRM
-"""
+"""Módulo para cálculo de rutas reales usando OSRM"""
 
 import requests
 from typing import List, Tuple
 from geopy.distance import geodesic
 
 class RealRouteCalculator:
-    """Calcula rutas reales usando OSRM (Open Source Routing Machine)"""
+    """Calcula rutas reales usando OSRM"""
     
     def __init__(self, base_url="http://router.project-osrm.org/route/v1/driving/"):
         self.base_url = base_url
@@ -34,7 +32,7 @@ class RealRouteCalculator:
                 return [[coord[1], coord[0]] for coord in route_geometry]
             
         except Exception as e:
-            print(f"❌ Error obteniendo ruta real: {str(e)}")
+            print(f"Error obteniendo ruta real: {str(e)}")
         
         # Fallback: línea recta si OSRM falla
         return coordinates
@@ -55,7 +53,7 @@ class RealRouteCalculator:
                 return route['duration'] / 60, route['distance'] / 1000  # minutos, km
             
         except Exception as e:
-            print(f"❌ Error obteniendo duración de ruta: {str(e)}")
+            print(f"Error obteniendo duración de ruta: {str(e)}")
         
         # Fallback: calcular distancia geodésica
         distance_km = geodesic(origin, destination).kilometers

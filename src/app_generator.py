@@ -1,6 +1,4 @@
-"""
-Módulo para generación de outputs JSON para aplicaciones móviles
-"""
+"""Módulo para generación de outputs JSON para aplicaciones móviles"""
 
 from datetime import datetime, timedelta
 from typing import Dict

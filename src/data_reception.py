@@ -1,13 +1,11 @@
-"""
-Módulo de recepción y validación de datos de pasajeros
-"""
+"""Recepción y validación de datos de pasajeros"""
 
 import pandas as pd
 from datetime import datetime
 from typing import List, Dict, Tuple
 
 class DataReceptionSystem:
-    """Sistema de recepción de datos de pasajeros con validación y procesamiento"""
+    """Validación y procesamiento"""
     
     def __init__(self):
         self.required_columns = ['name', 'id', 'lat', 'lng', 'company_address']
@@ -36,7 +34,7 @@ class DataReceptionSystem:
                     return coord / 1000
             return coord
         
-        # Aplicar limpieza a latitud y longitud
+        # Limpieza a latitud y longitud
         if 'lat' in df_clean.columns:
             df_clean['lat'] = df_clean['lat'].apply(convert_coordinate)
         
@@ -59,7 +57,7 @@ class DataReceptionSystem:
             if col in df.columns and df[col].isnull().any():
                 errors.append(f"Valores nulos encontrados en columna: {col}")
         
-        # Verificar rango de coordenadas (para Colombia)
+        # Verificar rango de coordenadas (Colombia)
         if 'lat' in df.columns and 'lng' in df.columns:
             # Convertir a numérico antes de comparar
             try:
@@ -78,15 +76,15 @@ class DataReceptionSystem:
     def process_passenger_data(self, file_path: str) -> pd.DataFrame:
         """Procesa el archivo CSV de pasajeros"""
         self.processing_start_time = datetime.now()
-        print(f"🚀 Iniciando procesamiento de datos: {self.processing_start_time}")
+        print(f"Iniciando procesamiento de datos: {self.processing_start_time}")
         
         try:
             # Leer CSV
             df = pd.read_csv(file_path)
-            print(f"✅ Archivo leído exitosamente: {len(df)} pasajeros")
+            print(f"Archivo leído exitosamente: {len(df)} pasajeros")
             
             # Limpiar coordenadas
-            print("🔧 Limpiando formato de coordenadas...")
+            print("Limpiando formato de coordenadas...")
             df = self.clean_coordinates(df)
             
             # Validar datos
@@ -100,11 +98,11 @@ class DataReceptionSystem:
             df['lng'] = pd.to_numeric(df['lng'], errors='coerce')
             df = df.dropna(subset=['lat', 'lng'])
             
-            print(f"✅ Datos validados y limpiados: {len(df)} pasajeros válidos")
+            print(f"Datos validados y limpiados: {len(df)} pasajeros válidos")
             return df
             
         except Exception as e:
-            print(f"❌ Error procesando datos: {str(e)}")
+            print(f"Error procesando datos: {str(e)}")
             raise
     
     def calculate_processing_time(self) -> float:

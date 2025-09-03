@@ -1,6 +1,4 @@
-"""
-Módulo para generación de gráficas estadísticas
-"""
+"""Módulo para generación de estadísticas"""
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -9,13 +7,10 @@ from typing import Dict
 import os
 
 class StatsVisualizer:
-    """Clase para generar visualizaciones estadísticas del sistema"""
-    
     def __init__(self):
         self.colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9A826', '#6A0572']
     
     def ensure_img_directory(self):
-        """Asegura que el directorio img existe"""
         os.makedirs('img', exist_ok=True)
     
     def create_utilization_analysis(self, routes_data: Dict, save_path: str = 'img/bus_utilization_analysis.png'):
@@ -66,26 +61,26 @@ class StatsVisualizer:
             summary_text = f"""
             RESUMEN ESTADÍSTICO
             
-            📊 Total Pasajeros: {routes_data['summary']['total_passengers']}
-            🚌 Total Buses: {routes_data['summary']['total_buses']}
-            🎯 Utilización: {routes_data['summary']['utilization_rate']:.1%}
-            📈 Eficiencia Promedio: {np.mean(efficiency):.1f}%
-            🪑 Asientos Vacíos: {sum(bus_capacities) - sum(bus_usage)}
+            - Total Pasajeros: {routes_data['summary']['total_passengers']}
+            - Total Buses: {routes_data['summary']['total_buses']}
+            - Utilización: {routes_data['summary']['utilization_rate']:.1%}
+            - Eficiencia Promedio: {np.mean(efficiency):.1f}%
+            - Asientos Vacíos: {sum(bus_capacities) - sum(bus_usage)}
             
-            🏆 Bus Más Eficiente: {max(efficiency):.1f}%
-            📉 Bus Menos Eficiente: {min(efficiency):.1f}%
+            - Bus Más Eficiente: {max(efficiency):.1f}%
+            - Bus Menos Eficiente: {min(efficiency):.1f}%
             """
             
             plt.text(0.1, 0.5, summary_text, fontsize=12, verticalalignment='center',
                     bbox=dict(boxstyle="round,pad=0.3", facecolor="lightgray"))
             
-            plt.suptitle('📊 Análisis de Utilización - Night Shift System', fontsize=16, fontweight='bold')
+            plt.suptitle('Análisis de Utilización - Turno Nocturno', fontsize=16, fontweight='bold')
             plt.tight_layout()
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"📈 Gráfico de análisis guardado: {save_path}")
+            print(f"Análisis guardado: {save_path}")
             
         except Exception as e:
-            print(f"❌ Error creando gráfico de análisis: {str(e)}")
+            print(f"Error creando gráfico de análisis: {str(e)}")
     
     def create_geographic_distribution(self, routes_data: Dict, save_path: str = 'img/geographic_distribution.png'):
         """Crea gráfico de distribución geográfica"""
@@ -115,21 +110,15 @@ class StatsVisualizer:
             plt.legend()
             plt.grid(True, alpha=0.3)
             
-            # Añadir anotaciones
-            plt.annotate('Oficina Central', xy=(-74.1288623, 4.6724261), xytext=(-74.14, 4.66),
-                        arrowprops=dict(arrowstyle='->', color='red'),
-                        bbox=dict(boxstyle="round,pad=0.3", facecolor="yellow"))
-            
             plt.tight_layout()
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"🗺️ Gráfico de distribución geográfica guardado: {save_path}")
+            print(f"Gráfico de distribución geográfica guardado: {save_path}")
             
         except Exception as e:
-            print(f"❌ Error creando gráfico de distribución: {str(e)}")
+            print(f"Error creando gráfico de distribución: {str(e)}")
     
     def create_performance_timeline(self, processing_time: float, optimization_time: float, 
                                   save_path: str = 'img/performance_timeline.png'):
-        """Crea timeline de performance del sistema"""
         self.ensure_img_directory()
         
         try:
@@ -170,17 +159,17 @@ class StatsVisualizer:
             
             plt.tight_layout()
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"⏱️ Timeline de performance guardado: {save_path}")
+            print(f"Timeline de performance guardado: {save_path}")
             
         except Exception as e:
-            print(f"❌ Error creando timeline de performance: {str(e)}")
+            print(f"Error creando timeline de performance: {str(e)}")
     
     def create_all_charts(self, routes_data: Dict, processing_time: float, optimization_time: float):
         """Crea todas las gráficas estadísticas"""
-        print("\n📊 GENERANDO GRÁFICAS ESTADÍSTICAS")
+        print("\GENERANDO GRÁFICAS ESTADÍSTICAS")
         
         self.create_utilization_analysis(routes_data)
         self.create_geographic_distribution(routes_data)
         self.create_performance_timeline(processing_time, optimization_time)
         
-        print("✅ Todas las gráficas generadas en la carpeta img/")
+        print("Todas las gráficas generadas en la carpeta img/")
