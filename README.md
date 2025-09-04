@@ -1,6 +1,6 @@
 # Bas - Sistema de Optimización de Transporte
 
-![Python](https://img.shields.io/badge/Python-3.13%2B-blue)
+![Python](https://img.shields.io/badge/Python-3.13.7-blue)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-green)
 ![License](https://img.shields.io/badge/License-MIT-orange)
 
@@ -48,4 +48,4 @@ El sistema generará:
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
 </a>
 </p>
-Last Edited on: 03/09s/2025
+Last Edited on: 03/09/2025

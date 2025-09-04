@@ -166,7 +166,7 @@ class StatsVisualizer:
     
     def create_all_charts(self, routes_data: Dict, processing_time: float, optimization_time: float):
         """Crea todas las gráficas estadísticas"""
-        print("\GENERANDO GRÁFICAS ESTADÍSTICAS")
+        print("GENERANDO GRÁFICAS ESTADÍSTICAS")
         
         self.create_utilization_analysis(routes_data)
         self.create_geographic_distribution(routes_data)
